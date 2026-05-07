@@ -14,39 +14,22 @@ public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
-// Create a new account based on the request and return the account details in the response
+    // Create a new account based on the request and return the account details in the response
     public AccountResponse createAccount(CreateAccountRequest request) {
 
         Account account = new Account();
-
         account.setAccountHolderName(request.getAccountHolderName());
         account.setBalance(request.getInitialDeposit());
-
         Account savedAccount = accountRepository.save(account);
 
-        AccountResponse response = new AccountResponse();
-
-        response.setAccountId(savedAccount.getAccountId());
-        response.setAccountHolderName(savedAccount.getAccountHolderName());
-        response.setAccountNumber(savedAccount.getAccountNumber());
-        response.setBalance(savedAccount.getBalance());
-        response.setStatus(savedAccount.getStatus().name());
-
-        return response;
+        return AccountResponse.from(savedAccount);
     }
+    // Fetch account details by account ID and return the account details in the response
     public AccountResponse getAccountById(String accountId) {
 
         Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-        AccountResponse response = new AccountResponse();
-
-        response.setAccountId(account.getAccountId());
-        response.setAccountHolderName(account.getAccountHolderName());
-        response.setAccountNumber(account.getAccountNumber());
-        response.setBalance(account.getBalance());
-        response.setStatus(account.getStatus().name());
-
-        return response;
+        return AccountResponse.from(account);
     }
 }
