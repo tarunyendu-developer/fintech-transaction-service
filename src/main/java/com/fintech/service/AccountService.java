@@ -3,6 +3,7 @@ package com.fintech.service;
 import com.fintech.dto.request.CreateAccountRequest;
 import com.fintech.dto.response.AccountResponse;
 import com.fintech.entity.Account;
+import com.fintech.exception.AccountNotFoundException;
 import com.fintech.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,21 @@ public class AccountService {
         response.setAccountNumber(savedAccount.getAccountNumber());
         response.setBalance(savedAccount.getBalance());
         response.setStatus(savedAccount.getStatus().name());
+
+        return response;
+    }
+    public AccountResponse getAccountById(String accountId) {
+
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+
+        AccountResponse response = new AccountResponse();
+
+        response.setAccountId(account.getAccountId());
+        response.setAccountHolderName(account.getAccountHolderName());
+        response.setAccountNumber(account.getAccountNumber());
+        response.setBalance(account.getBalance());
+        response.setStatus(account.getStatus().name());
 
         return response;
     }
