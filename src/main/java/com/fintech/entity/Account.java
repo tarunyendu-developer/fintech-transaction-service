@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.UUID;
 
 @Entity
@@ -46,7 +47,7 @@ public class Account {
     @PrePersist
     public void prePersist() {
         this.accountId = UUID.randomUUID().toString();
-        this.accountNumber = "ACC" + System.currentTimeMillis();
+        this.accountNumber = "ACC" + (1000000000L + new Random().nextInt(900000000));
         this.status = AccountStatus.ACTIVE;
     }
 
